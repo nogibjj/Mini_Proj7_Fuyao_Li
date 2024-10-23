@@ -1,3 +1,4 @@
+[![CI/CD](https://github.com/nogibjj/Mini_Proj7_Fuyao_Li/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/Mini_Proj7_Fuyao_Li/actions/workflows/cicd.yml)
 ## Mini_Project7
 
 Author: Fuyao Li
