@@ -2,7 +2,6 @@
 Test goes here
 
 """
-import subprocess
 from mylib.extract import extract
 from mylib.transform_load import load
 from mylib.query import (
