@@ -49,5 +49,5 @@ def load(dataset1="data/trump.csv"):
 
             cursor.close()
             connection.close()
-        
+    print("Load the dataset successfully")
     return result

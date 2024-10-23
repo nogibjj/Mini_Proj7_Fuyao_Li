@@ -12,22 +12,29 @@ def insert_row(date, location, city, state, lat, lng):
     server_host_name = os.getenv("SERVER_HOST_NAME")
     sql_http = os.getenv("SQL_HTTP")
 
-    with sql.connect(
-        access_token=databricks_key,
-        server_hostname=server_host_name,
-        http_path=sql_http,
-    ) as connection:
-        with connection.cursor() as cursor:
-            insert_query = """
-            INSERT INTO FL_citydb (date, location, city, state, lat, lng)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """
-            cursor.execute(insert_query, (date, location, city, state, lat, lng))
-            result = cursor.fetchall()
-            print(result)
-        cursor.close()
-        connection.close()
-    return result
+    try:
+        with sql.connect(
+            access_token=databricks_key,
+            server_hostname=server_host_name,
+            http_path=sql_http,
+        ) as connection:
+            with connection.cursor() as cursor:
+                # Insert query
+                insert_query = """
+                INSERT INTO FL_citydb (date, location, city, state, lat, lng)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """
+                # Execute the query
+                cursor.execute(insert_query, (date, location, city, state, lat, lng))
+                
+                # If no exception occurs, assume success
+                print("Insert query executed successfully.")
+                
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+
+    return True
 
 
 def update_row(city, date):
@@ -37,21 +44,25 @@ def update_row(city, date):
     server_host_name = os.getenv("SERVER_HOST_NAME")
     sql_http = os.getenv("SQL_HTTP")
 
-    with sql.connect(
-        access_token=databricks_key,
-        server_hostname=server_host_name,
-        http_path=sql_http,
-    ) as connection:
-        with connection.cursor() as cursor:
-            update_query = """
-            UPDATE FL_citydb
-            SET date = ?
-            WHERE city = ?;
-            """
-            cursor.execute(update_query, (date, city))
-            result = cursor.fetchall()
-            print(result)
-    return result
+    try:
+        with sql.connect(
+            access_token=databricks_key,
+            server_hostname=server_host_name,
+            http_path=sql_http,
+        ) as connection:
+            with connection.cursor() as cursor:
+                update_query = """
+                UPDATE FL_citydb
+                SET date = ?
+                WHERE city = ?;
+                """
+                cursor.execute(update_query, (date, city))
+                print("Update query executed successfully.")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+    return True
 
 
 def delete_row(city):
@@ -61,16 +72,18 @@ def delete_row(city):
     server_host_name = os.getenv("SERVER_HOST_NAME")
     sql_http = os.getenv("SQL_HTTP")
 
-    with sql.connect(
-        access_token=databricks_key,
-        server_hostname=server_host_name,
-        http_path=sql_http,
-    ) as connection:
-        with connection.cursor() as cursor:
-            delete_query = """DELETE FROM FL_citydb WHERE city = ?"""
-            cursor.execute(delete_query, (city,))
-            result = cursor.fetchall()
-            print(result)
-        cursor.close()
-        connection.close()
-    return result
+    try:
+        with sql.connect(
+            access_token=databricks_key,
+            server_hostname=server_host_name,
+            http_path=sql_http,
+        ) as connection:
+            with connection.cursor() as cursor:
+                delete_query = """DELETE FROM FL_citydb WHERE city = ?"""
+                cursor.execute(delete_query, (city,))
+                print("Delete query executed successfully.")
+            
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+    return True

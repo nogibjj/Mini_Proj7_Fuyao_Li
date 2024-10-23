@@ -3,86 +3,63 @@ Test goes here
 
 """
 import subprocess
+from mylib.extract import extract
+from mylib.transform_load import load
+from mylib.query import (
+    insert_row,
+    update_row,
+    delete_row,
+)
 
 
 def test_extract():
-    result = subprocess.run(
-        [
-            "python",
-            "main.py",
-            "extract",
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    assert result.returncode == 0
+    results = extract()
+    assert results is not None
 
 
 def test_load():
-    result = subprocess.run(
-        [
-            "python",
-            "main.py",
-            "load",
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    assert result.returncode == 0
+    results = load()
+    assert results is not None
 
 
 def test_insert_row():
-    result = subprocess.run(
-        [
-            "python",
-            "main.py",
-            "insert",
-            "10/30/2016", 
-            "Durham, NC", 
-            "Durham", 
-            "NC", 
-            "35.99", 
-            "78.89"
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    assert result.returncode == 0
+    test_data = {
+        "date": "10/30/2022",
+        "location": "Durham, NC",
+        "city": "Durham",
+        "state": "NC",
+        "lat": 35.99,
+        "lng": 78.89,
+    }
 
+    # Insert the row
+    insert_result = insert_row(
+        test_data["date"],
+        test_data["location"],
+        test_data["city"],
+        test_data["state"],
+        test_data["lat"],
+        test_data["lng"],
+    )
+    assert insert_result is True
 
 
 def test_update_row():
-    result = subprocess.run(
-        [
-            "python",
-            "main.py",
-            "update",
-            "Durham", 
-            "10/15/2022", 
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    assert result.returncode == 0
+    test_data = {
+        "date": "10/30/2024",
+        "city": "Durham",
+    }
+
+    update_result = update_row(test_data["city"], test_data["date"])
+    assert update_result is True
 
 
 def test_delete_row():
-    result = subprocess.run(
-        [
-            "python",
-            "main.py",
-            "delete",
-            "Manchester", 
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    assert result.returncode == 0
+    test_data = {
+        "city": "Durham",
+    }
+    delete_result = delete_row(test_data["city"])
+    assert delete_result is True
 
 
 if __name__ == "__main__":
